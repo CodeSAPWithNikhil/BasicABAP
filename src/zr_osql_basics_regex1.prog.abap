@@ -5,8 +5,9 @@ SELECT SINGLE
   instr( 'Amravati','v' ) AS instr, "Result: 5
   left( '4500000000 order has been created', 10 ) AS left,  "Result: 4500000000   "similar results for right function
 
-  like_regexpr( pcre  = '\d',           "find if there's any digit (0 = not found, 1 = found
-                value = '10078' ) AS like_regex,  "Result: 1(found)
+  like_regexpr( pcre  = '\d', value = '10078' ) AS like_regex,  "find if there's any digit (0= not found,1= found) || Result: 1(found)
+
+  like_regexpr( pcre  = '^\w+@\w+\.\w{2,}$', value = 'brucewayne@justiceleague.com' ) AS is_email_valid, " Result: 1(positive)
 
   locate_regexpr( pcre = '\d',          "find the offset of the digits in string using \d regex
                   value = 'bruce.wayne28@justiceleague.com',
@@ -19,9 +20,9 @@ SELECT SINGLE
   occurrences_regexpr( pcre = '\d', "find all the number of occurrences of digit regex
                        value = 'Clark Kent 2025' ) AS occ_regex, "Result: 4
 
-  replace_regexpr( pcre = '^\w+@\w+\.\w{2,}$',     "email id regex
-                   value = 'brucewayne@justiceleague.com',
-                   with = '#' ) AS replace_regex, "Replaces the email id with # if it matches with regex
+  replace_regexpr( pcre = '[^\d]',     "non-digit regex
+                   value = 'USD9000#',
+                   with = @space ) AS replace_regex, "Result: 900
 
   substring_regexpr( pcre = '\d+',                 "number regex
                      value = 'order 4500000000 has been created'
