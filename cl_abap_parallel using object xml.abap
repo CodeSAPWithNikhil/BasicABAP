@@ -1,5 +1,15 @@
-REPORT z619_parallel_proc2.
+PROGRAM.
+
+***************************************************************************************************
+*This ABAP code uses cl_abap_parallel to run multiple object-based threads in parallel.
+*It serializes and deserializes objects/threads using XML transformations.
+*lcl_processor acts as a parallel processor as well as individual thread.
+*Each thread processes data parallely, updates records, and sets a message. 
+*The run method executes multiple threads parallely.
+***************************************************************************************************
+
 TYPES: tt_emp TYPE TABLE OF zemp WITH EMPTY KEY.
+
 CLASS lcl_processor DEFINITION
 INHERITING FROM cl_abap_parallel.
 
@@ -57,9 +67,7 @@ CLASS lcl_processor IMPLEMENTATION.
       ELSE.
         lo_thread->set_message( 'Data update failed' ).
       ENDIF.
-      CALL TRANSFORMATION id
-     SOURCE model = lo_thread
-     RESULT XML p_out.
+        lcl_processor=>transform_object_to_xml( lo_thread ).
     ENDIF.
   ENDMETHOD.
 
@@ -94,17 +102,11 @@ PARAMETERS: tasks TYPE i DEFAULT 6 OBLIGATORY,
             sets  TYPE i DEFAULT 4 OBLIGATORY.
 
 START-OF-SELECTION.
-
-  DATA(o_thread1) = NEW lcl_processor( it_emp = VALUE tt_emp( ( empno   = '100'
-                                                                deptno  = '20'
-                                                                empname = 'Dummy1' ) )  ).
-
-  DATA(o_parallel_processor) = NEW lcl_processor( p_num_tasks = tasks  ).
-
-
   TYPES: to_thread TYPE REF TO lcl_processor.
-  DATA t_threads TYPE TABLE OF to_thread WITH EMPTY KEY.
+  DATA: t_threads TYPE TABLE OF to_thread WITH EMPTY KEY,
+        o_thread_out TYPE REF TO lcl_processor.
 
+  DATA(o_parallel_processor) = NEW lcl_processor( p_num_tasks = tasks  )
 
   DO sets TIMES.
     APPEND NEW lcl_processor( it_emp = VALUE tt_emp( ( empno   = '100' * sy-index
@@ -114,6 +116,7 @@ START-OF-SELECTION.
 
   DATA(o_timer) = cl_abap_runtime=>create_hr_timer( ).
   o_timer->get_runtime(  ).
+
   o_parallel_processor->run( EXPORTING p_in_tab  = VALUE cl_abap_parallel=>t_in_tab( FOR lo_thread IN t_threads
                                                         ( lcl_processor=>transform_object_to_xml( lo_thread ) ) )
                              IMPORTING p_out_tab = DATA(t_out) ).
@@ -122,7 +125,7 @@ START-OF-SELECTION.
   DATA(v_runtime_sec) =  o_timer->get_runtime(  ) / 1000000.
   WRITE:/ |Total runtimes in microseconds : { v_runtime } |.
   WRITE:/ |Total runtimes in seconds : { v_runtime_sec } |.
-  DATA o_thread_out TYPE REF TO lcl_processor.
+
   LOOP AT t_out INTO DATA(s_out).
     CHECK s_out-result IS NOT INITIAL.
 
@@ -131,4 +134,5 @@ START-OF-SELECTION.
     IF o_thread_out IS BOUND.
       WRITE:/ o_thread_out->get_message(  ).
     ENDIF.
+
   ENDLOOP.
