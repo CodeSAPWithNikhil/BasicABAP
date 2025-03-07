@@ -1,4 +1,4 @@
-REPORT zr_groupby.
+PROGRAM.
 
 TYPES: BEGIN OF ts_group,
          city       TYPE ztemployee-city,
