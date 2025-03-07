@@ -17,9 +17,8 @@ START-OF-SELECTION.
 *****************Group by using nested classical loop **********************************
 ****************************************************************************************
 
-  LOOP AT t_employees INTO DATA(t_group) GROUP BY
-  ( city = t_group-city
-    cuky_field = t_group-cuky_field ).
+  LOOP AT t_employees INTO DATA(t_group) GROUP BY ( city       = t_group-city
+                                                    cuky_field = t_group-cuky_field ).
 
     DATA(v_total_salary) = VALUE ztemployee-salary( ).
 
@@ -39,9 +38,8 @@ START-OF-SELECTION.
 *****************Group by using combined classical and for loop*************************
 ****************************************************************************************
   CLEAR t_grouped.
-  LOOP AT t_employees INTO t_group GROUP BY
- ( city = t_group-city
-   cuky_field = t_group-cuky_field ).
+  LOOP AT t_employees INTO t_group GROUP BY ( city       = t_group-city
+                                              cuky_field = t_group-cuky_field ).
 
     CLEAR v_total_salary.
 
