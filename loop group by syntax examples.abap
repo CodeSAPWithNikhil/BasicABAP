@@ -5,6 +5,7 @@ TYPES: BEGIN OF ts_group,
          cuky_field TYPE ztemployee-cuky_field,
          salary     TYPE ztemployee-salary,
        END OF ts_group.
+
 TYPES tt_grp TYPE TABLE OF ts_group WITH EMPTY KEY.
 DATA: t_grouped TYPE TABLE OF ts_group.
 
