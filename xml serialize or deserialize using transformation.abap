@@ -1,4 +1,4 @@
-REPORT zr_xml_serialize.
+PROGRAM.
 
 START-OF-SELECTION.
   TYPES: BEGIN OF ty_payload,
