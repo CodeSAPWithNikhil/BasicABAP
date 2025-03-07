@@ -108,4 +108,5 @@ START-OF-SELECTION.
 
 
   cl_demo_output=>write( t_grouped ).
+
   cl_demo_output=>display(  ).
