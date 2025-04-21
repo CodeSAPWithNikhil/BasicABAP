@@ -1,4 +1,4 @@
-CLASS cl_ehhss_bo_hsm_excel_handler DEFINITION
+CLASS zcl_excel_handler DEFINITION
   PUBLIC
   FINAL
   CREATE PUBLIC .
@@ -127,7 +127,7 @@ ENDCLASS.
 
 
 
-CLASS CL_EHHSS_BO_HSM_EXCEL_HANDLER IMPLEMENTATION.
+CLASS zcl_excel_handler IMPLEMENTATION.
 
 
   METHOD add_sheet.
