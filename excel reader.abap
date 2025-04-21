@@ -506,10 +506,8 @@ CLASS zcl_excel_handler IMPLEMENTATION.
           lv_index_sheet = lv_index_sheet + 1.
         ENDWHILE.
 
-      CATCH cx_openxml_not_found cx_openxml_format.
-        RAISE EXCEPTION TYPE cx_ehhss_bo_hsm_common
-          EXPORTING
-            textid = cx_mdq_rulemgmt_data_exchange=>cx_excel_file_cannot_be_read.
+      CATCH cx_root into data(lo_root).
+        RAISE EXCEPTION lo_root.
     ENDTRY.
   ENDMETHOD.
 
